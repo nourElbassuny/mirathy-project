@@ -3,10 +3,16 @@ package com.NTG.mirathy.service;
 import com.NTG.mirathy.DTOs.response.AuthResponse;
 import com.NTG.mirathy.DTOs.request.LoginRequest;
 import com.NTG.mirathy.DTOs.request.SignupRequest;
+import com.NTG.mirathy.Entity.ActivationToken;
+import com.NTG.mirathy.Entity.Enum.EmailTemplateName;
 import com.NTG.mirathy.Entity.Enum.Role;
 import com.NTG.mirathy.Entity.User;
+import com.NTG.mirathy.Repository.ActivationTokenRepo;
 import com.NTG.mirathy.Repository.UserRepository;
+import com.NTG.mirathy.service.email.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +32,11 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService customUserDetailsService;
+    private final ActivationTokenRepo activationTokenRepo;
+    private final EmailService emailService;
+
+    @Value("${application.security.miling.frontend.activation-url}")
+    private String activationUrl;
 
     public AuthResponse login(LoginRequest request) {
         try {
@@ -58,7 +71,7 @@ public class AuthService {
         }
     }
 
-    public AuthResponse register(SignupRequest request) {
+    public AuthResponse register(SignupRequest request) throws MessagingException {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
@@ -72,7 +85,7 @@ public class AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
-
+        sendValidationEmail(savedUser);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(savedUser.getEmail());
         String token = jwtService.generateToken(userDetails);
@@ -89,4 +102,41 @@ public class AuthService {
                 .success(true)
                 .build();
     }
+
+    private void  sendValidationEmail(User savedUser) throws MessagingException {
+        var newToken = generateAndSaveActivationToken(savedUser);
+        emailService.sendEmail(
+                savedUser.getEmail(),
+                savedUser.getFullName(),
+                EmailTemplateName.ACTIVATE_ACCOUNT,
+                activationUrl,
+                newToken,
+                "Activate Your Account"
+        );
+    }
+
+    private String generateAndSaveActivationToken(User savedUser) {
+        // generate a token
+        String generatedToken = generateActinationToken(4);
+        var token = ActivationToken.builder()
+                .token(generatedToken)
+                .createdAt(java.time.LocalDateTime.now())
+                .expiresAt(java.time.LocalDateTime.now().plusMinutes(15))
+                .user(savedUser)
+                .build();
+        activationTokenRepo.save(token);
+        return generatedToken;
+    }
+
+    private String generateActinationToken(int length) {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        SecureRandom random = new SecureRandom();
+        StringBuilder token = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            token.append(characters.charAt(index));
+        }
+        return token.toString();
+    }
+
 }
