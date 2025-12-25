@@ -1,5 +1,6 @@
 package com.NTG.mirathy.service;
 
+import com.NTG.mirathy.DTOs.InheritanceShareDto;
 import com.NTG.mirathy.DTOs.request.InheritanceCalculationRequest;
 import com.NTG.mirathy.DTOs.response.InheritanceMemberResponse;
 import com.NTG.mirathy.Entity.Enum.FixedShare;
@@ -28,7 +29,9 @@ public class InheritanceCalculationService {
         validateRequest(request);
         InheritanceCase inheritanceCase = new InheritanceCase(request.totalEstate(), request.debts(), request.will(), request.heirs());
         String title = arabicInheritanceTextService.generateText(request);
-                List < InheritanceMember > members = new ArrayList<>();
+
+
+                List <InheritanceShareDto> members = new ArrayList<>();
 
         for (InheritanceRule rule : rules) {
             if (rule.canApply(inheritanceCase)) {

@@ -13,6 +13,7 @@ public enum HeirType {
     SON("ابن",null),
     DAUGHTER("بنت",null);
 
+
     private final String arabicName;
     private final Integer MAX_ALLOWED;
 
