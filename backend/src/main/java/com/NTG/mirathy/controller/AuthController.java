@@ -4,6 +4,7 @@ import com.NTG.mirathy.DTOs.response.AuthResponse;
 import com.NTG.mirathy.DTOs.request.LoginRequest;
 import com.NTG.mirathy.DTOs.request.SignupRequest;
 import com.NTG.mirathy.service.AuthService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody SignupRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody SignupRequest request) throws MessagingException {
         AuthResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
