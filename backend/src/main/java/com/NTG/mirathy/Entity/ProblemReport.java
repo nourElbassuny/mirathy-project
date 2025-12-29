@@ -1,6 +1,7 @@
 package com.NTG.mirathy.Entity;
 
 
+import com.NTG.mirathy.Entity.Enum.ProblemReportStauts;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,9 @@ public class ProblemReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String description;
 
-    private String status;
+    private ProblemReportStauts status;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
