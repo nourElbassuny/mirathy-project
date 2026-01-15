@@ -40,7 +40,7 @@ public class SonRule implements InheritanceRule {
         } else {
             taaasibRule = TaaasibRule.REMAINDER_ONLY;
 
-            reason = "يرث الأبناء الذكور والإناث معا تعصيبا للذكر مثل حظ الأنثيين لقوله تعالى (يُوصِيكُمُ اللَّهُ فِي أَوْلادِكُمْ لِلذَّكَرِ مِثْلُ حَظِّ الأُنثَيَيْنِ)";
+            reason = "يرث الأبناء الذكور تعصيبا.";
 
         }
         return new InheritanceShareDto(heirType, shareType, fixedShare, taaasibRule, reason);

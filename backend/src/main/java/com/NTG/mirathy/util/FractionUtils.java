@@ -54,8 +54,26 @@ public class FractionUtils {
     }
 
 
+    public static String fixedText(Fraction fraction) {
+        StringBuilder builder = new StringBuilder();
+       if (fraction.numerator()==2){
+           builder.append("الثلثين ");
+       } else if (fraction.denominator()==6) {
+           builder.append("السدس ");
+       } else if (fraction.denominator()==8) {
+           builder.append("الثمن ");
+       }else if (fraction.denominator()==3) {
+           builder.append("الثلث ");
+       }else if (fraction.denominator()==2) {
+           builder.append("النصف ");
+       }else if (fraction.denominator()==4) {
+           builder.append("الربع ");
+       }
+       builder.append("فرضا ");
+        return builder.toString();
+    }
     public static String text(Fraction fraction) {
-        return fraction.numerator() + "/" + fraction.denominator();
+        return fraction.numerator()+"/"+fraction.denominator();
     }
 
     private static long gcd(long a, long b) {

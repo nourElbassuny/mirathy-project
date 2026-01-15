@@ -82,8 +82,16 @@ public class InheritanceCalculationService {
         } else if (sum.compareTo(BigDecimal.ONE) < 0 && !taaasibRuleFound) {
             elradFlag = true;
             System.out.println("الرد");
-            note = "المسألة بها رد هو هو توزيع ما تبقّى من التركة على أصحاب الفروض (غير الزوجين) بنسبة فروضهم\n" +
-                    "عند عدم وجود عاصب.";
+            note = "المسألة بها رد هو هو توزيع ما تبقّى من التركة على أصحاب الفروض (غير الزوجين) بنسبة فروضهم عند عدم وجود عاصب." ;
+
+
+            if (request.heirs().size()==1){
+                if (request.heirs().get(HeirType.HUSBAND)>0){
+                    note+="لكن فى هذه المسألة لايوجد غير الزوج فيجب الرد عليه .";
+                } else if (request.heirs().get(HeirType.WIFE)>0) {
+                    note+="لكن فى هذه المسألة لايوجد غير الزوجة فيجب الرد عليها.";
+                }
+            }
             fractionList = new ArrayList<>(applyElrd(members));
         }
         int index = 0;
@@ -95,7 +103,7 @@ public class InheritanceCalculationService {
                 Fraction fraction = new Fraction(member.fixedShare().getNumerator(),
                         member.fixedShare().getDenominator());
 
-                String nasib = FractionUtils.text(fraction) + ((flag) ? (" + " + member.taaasibRule().getDescription()) : "")
+                String nasib = FractionUtils.fixedText(fraction) + ((flag) ? (" + " + member.taaasibRule().getDescription()) : "")
                         + ((elradFlag && request.heirs().size() == 1) ? " و الباقى ردا" : "");
 
                 int memberCount = request.heirs().get(member.heirType());
@@ -128,7 +136,11 @@ public class InheritanceCalculationService {
 
                     Fraction fraction = FractionUtils.subtractSumFromOne(fractionList);
 
+
+
                     String nasib = member.taaasibRule().getDescription();
+
+
 
                     int memberCount = request.heirs().get(member.heirType());
 
@@ -137,6 +149,11 @@ public class InheritanceCalculationService {
 
 
                     String nisbtElfard = FractionUtils.text(fractionNisbtElfard);
+
+                    if (fraction.numerator()==0) {
+                        nasib += " ولم تبقى شئ.";
+                        nisbtElfard="0";
+                    }
                     double individualAmount = (money * fractionNisbtElfard.numerator()) / fractionNisbtElfard.denominator();
                     individualAmount = Math.round(individualAmount * 100.0) / 100.0;
 
@@ -148,12 +165,17 @@ public class InheritanceCalculationService {
                             individualAmount,
                             member.reason()));
                 } else if (count == 2) {
-                    boolean isMale = (member.heirType() == HeirType.SON) || (member.heirType() == HeirType.SON_OF_SON);
+                    boolean isMale = (member.heirType() == HeirType.SON) || (member.heirType() == HeirType.SON_OF_SON)||
+                            (member.heirType() == HeirType.FULL_BROTHER)||(member.heirType() == HeirType.PATERNAL_BROTHER);
                     int elasham=1 ;
                     if ((member.heirType() == HeirType.SON)||(member.heirType() == HeirType.DAUGHTER)) {
                         elasham = request.heirs().get(HeirType.DAUGHTER) + 2 * request.heirs().get(HeirType.SON);
                     } else if ((member.heirType() == HeirType.SON_OF_SON)||(member.heirType() == HeirType.DAUGHTER_OF_SON)) {
                         elasham = request.heirs().get(HeirType.DAUGHTER_OF_SON) + 2 * request.heirs().get(HeirType.SON_OF_SON);
+                    } else if ((member.heirType() == HeirType.FULL_BROTHER)||(member.heirType() == HeirType.FULL_SISTER)) {
+                        elasham = request.heirs().get(HeirType.FULL_SISTER) + 2 * request.heirs().get(HeirType.FULL_BROTHER);
+                    } else if ((member.heirType() == HeirType.PATERNAL_BROTHER)||(member.heirType() == HeirType.PATERNAL_SISTER)) {
+                        elasham = request.heirs().get(HeirType.PATERNAL_SISTER) + 2 * request.heirs().get(HeirType.PATERNAL_BROTHER);
                     }
 
 
@@ -177,6 +199,10 @@ public class InheritanceCalculationService {
                     String nisbtElfard = FractionUtils.text(fractionNisbtElfard);
                     double individualAmount = (money * fractionNisbtElfard.numerator()) / fractionNisbtElfard.denominator();
 
+                    if (fraction.numerator()==0) {
+                        nasib += " ولم تبقى شئ.";
+                        nisbtElfard="0";
+                    }
 
                     individualAmount = Math.round(individualAmount * 100.0) / 100.0;
 

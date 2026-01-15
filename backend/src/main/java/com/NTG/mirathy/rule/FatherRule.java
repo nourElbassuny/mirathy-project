@@ -34,6 +34,10 @@ public class FatherRule implements InheritanceRule {
             fixedShare=FixedShare.SIXTH;
             taaasibRule=TaaasibRule.REMAINDER_ONLY;
             reason="يرث الأب سدس التركة فى حالة وجود الفرع الوارث المؤنث (مثل البنت و بنت الابن و بنت ابن الإبن) لقوله تعالى (وَلأَبَوَيْهِ لِكُلِّ وَاحِدٍ مِنْهُمَا السُّدُسُ مِمَّا تَرَكَ إِنْ كَانَ لَهُ وَلَدٌ) .إضافة الى الباقى من التركة (إن تبقى شىء) تعصيبا لأنه أولى رجل ذكر لقولة ﷺ (ألحقوا الفرائض بأهلها فما بقى فهو لأولى رجل ذكر)";
+        } else if (inheritanceCase.totalNumberOfHeirs()==1) {
+            shareType = ShareType.TAASIB;
+            taaasibRule=TaaasibRule.ALL_ESTATE_ONLY;
+            reason="يرث الأب كامل التركة تعصيباً فى حالة الانفراد و عدم الفرع الوارث المذكر والمؤنث . قال ﷺ ( ألحقوا الفرائض بأهلها فما بقى فهو لأولى رجل ذكر.)";
         }else {
             shareType = ShareType.TAASIB;
             taaasibRule=TaaasibRule.REMAINDER_ONLY;

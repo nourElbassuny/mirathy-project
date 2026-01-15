@@ -65,6 +65,11 @@ public class InheritanceCase {
         int fullSiblingsCount = 0;
         fullSiblingsCount += c.count(HeirType.FULL_BROTHER);
         fullSiblingsCount += c.count(HeirType.FULL_SISTER);
+        fullSiblingsCount += c.count(HeirType.PATERNAL_BROTHER);
+        fullSiblingsCount += c.count(HeirType.PATERNAL_SISTER);
+        fullSiblingsCount += c.count(HeirType.MATERNAL_BROTHER);
+        fullSiblingsCount += c.count(HeirType.MATERNAL_SISTER);
+
         return fullSiblingsCount;
     }
 

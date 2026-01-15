@@ -22,6 +22,10 @@ public enum TaaasibRule {
 
     ALL_ESTATE_ONLY(
             "يرث كامل التركة تعصبا"
+    ),
+    ASABA_WITH_OTHERS(
+            "ترث الباقي تعصيبًا مع الغير"
     );
+
     private final String description;
 }

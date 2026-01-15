@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final InheritanceCalculationService inheritanceCalculationService;
     private final ProblemReportService problemReportService;
-    @GetMapping("calculate")
+    @PostMapping("/calculate")
     public InheritanceCalculationResult calculate(@Valid @RequestBody InheritanceCalculationRequest request){
         return inheritanceCalculationService.calculateProblem(request);
     }
