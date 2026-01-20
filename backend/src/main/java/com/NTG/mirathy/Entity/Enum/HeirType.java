@@ -35,6 +35,7 @@ public enum HeirType {
     // ====== الإخوة لأم ======
     MATERNAL_BROTHER("أخ لأم", null),
     MATERNAL_SISTER("أخت لأم", null),
+    MATERNAL_SIBLING("الاخوة والأخوات لام",null),
 
     // ====== أبناء الإخوة ======
     SON_OF_FULL_BROTHER("ابن الأخ الشقيق", null),

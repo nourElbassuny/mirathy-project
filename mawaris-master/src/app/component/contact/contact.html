@@ -1,0 +1,159 @@
+<div class="min-h-screen py-16 px-4 bg-gradient-to-b from-[#f5f3f0] to-[#ede9e4]" dir="rtl">
+  
+  <!-- Header Section -->
+  <div class="max-w-4xl mx-auto mb-16 text-center mt-8">
+    <div class="relative mb-12">
+      <h1 class="h-17 text-4xl md:text-5xl font-bold text-[#2c3e50] mb-4">
+        تواصل معنا
+      </h1>
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <div class="h-1 w-12 bg-gradient-to-r from-[#c0c0c0] to-[#2c3e50]"></div>
+        <div class="w-2 h-2 bg-[#c0c0c0] rounded-full"></div>
+        <div class="h-1 w-12 bg-gradient-to-r from-[#2c3e50] to-[#c0c0c0]"></div>
+      </div>
+      <p class="text-[#5a5a5a] text-lg">
+        هل لديك أسئلة أو ملاحظات؟ نحن هنا لنستمع إليك
+      </p>
+    </div>
+
+    <!-- Welcome Message -->
+    <div class="bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] rounded-xl p-6 shadow-lg text-white mb-8">
+      @if (isLoggedIn && userFullName) {
+        <p class="text-xl font-semibold">
+          مرحباً <span class="text-[#c0c0c0]">{{ userFullName }}</span>
+        </p>
+      } @else {
+        <p class="text-lg">
+          نرحب بك! يرجى ملء النموذج أدناه للتواصل معنا
+        </p>
+      }
+    </div>
+  </div>
+
+  <!-- Contact Form Container -->
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#c0c0c0]">
+      
+      <!-- Form Card -->
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="p-8 md:p-10 space-y-6">
+
+        <!-- Name Field (for non-logged-in users) -->
+        @if (!isLoggedIn) {
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+                الاسم
+              </span>
+            </label>
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="اكتب اسمك الكامل"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="isSubmitted && f['name']?.invalid"
+            />
+            <div *ngIf="isSubmitted && f['name']?.invalid" class="text-xs text-red-600 font-medium">
+              الاسم مطلوب (3 حروف على الأقل)
+            </div>
+          </div>
+        }
+
+        <!-- Email Field (for non-logged-in users) -->
+        @if (!isLoggedIn) {
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H4.5a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5H4.5A2.25 2.25 0 0 0 2.25 6.75m19.5 0v-5.25a2.25 2.25 0 0 0-2.25-2.25H4.5A2.25 2.25 0 0 0 2.25 1.5v5.25" />
+                </svg>
+                البريد الإلكتروني
+              </span>
+            </label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="example@email.com"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="isSubmitted && f['email']?.invalid"
+            />
+            <div *ngIf="isSubmitted && f['email']?.invalid" class="text-xs text-red-600 font-medium">
+              بريد إلكتروني غير صالح
+            </div>
+          </div>
+        }
+
+        <!-- Message Field -->
+        <div class="space-y-3">
+          <label class="block text-sm font-semibold text-[#2c3e50]">
+            <span class="inline-flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.694 48.694 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+              </svg>
+              الرسالة
+            </span>
+          </label>
+          <textarea
+            rows="6"
+            formControlName="message"
+            placeholder="اكتب رسالتك هنا... شارك معنا أسئلتك أو اقتراحاتك"
+            class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm resize-none bg-[#f9f7f4]
+                   focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition">
+          </textarea>
+          <div *ngIf="isSubmitted && f['message'].invalid" class="text-xs text-red-600 font-medium">
+            الرسالة يجب ألا تقل عن 10 حروف
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-4">
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="w-full bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] hover:from-[#0d3a2d] hover:to-[#155247]
+                   text-white py-3 rounded-lg text-sm font-bold transition duration-300
+                   flex items-center justify-center gap-2 shadow-lg disabled:opacity-70">
+
+            <span *ngIf="!isLoading">إرسال الرسالة</span>
+            <span *ngIf="isLoading">جاري الإرسال...</span>
+
+            <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.757a59.768 59.768 0 0 1 17.036 6.568 59.768 59.768 0 0 1-17.036 6.568L6 12z" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Logged-in User Note -->
+        @if (isLoggedIn) {
+          <div class="mt-6 pt-6 border-t-2 border-[#c0c0c0]">
+            <div class="flex items-start gap-3 p-4 bg-[#f0fdf4] rounded-lg border border-[#c0c0c0]">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#2c3e50] flex-shrink-0 mt-0.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              <p class="text-xs text-[#2c3e50]">
+                تم تسجيل دخولك كـ <span class="font-semibold text-[#c0c0c0]">{{ userFullName }}</span><br>
+                <span class="text-[#5a5a5a]">سيتم إرسال رسالتك مرتبطة بحسابك الشخصي</span>
+              </p>
+            </div>
+          </div>
+        }
+
+      </form>
+    </div>
+  </div>
+  
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
+      <svg class="animate-spin h-12 w-12 text-[#2c3e50]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <span class="text-[#2c3e50] font-semibold">جاري الإرسال...</span>
+    </div>
+  </div>
+</div>

@@ -1,127 +1,220 @@
-<div class="min-h-screen flex justify-center pt-24 pb-24" dir="rtl"  dir="rtl">
-  <div class="w-full max-w-md bg-[#fdfcf9] rounded-2xl shadow-lg px-6 py-12 text-center">
+<div class="min-h-screen flex justify-center py-10 px-4 bg-gradient-to-b from-[#f5f1e8] to-[#ede7dd]" dir="rtl">
+  
+  <div class="w-full max-w-md">
+    <!-- Card Container -->
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#c0c0c0]">
+      
+      <!-- Header Section with Gradient -->
+      <div class="bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] p-8 text-center text-white">
+        <img src="new1.png" alt="Logo" class="h-16 mx-auto mb-4 drop-shadow-lg" />
+        <h1 class="text-3xl font-bold mb-2">إنشاء حساب جديد</h1>
+        <p class="text-[#c0c0c0] text-sm font-medium">حاسبة المواريث الإسلامية</p>
+        
+        <!-- Decorative Line -->
+        <div class="flex items-center justify-center gap-2 mt-4">
+          <div class="h-0.5 w-8 bg-[#c0c0c0]"></div>
+          <div class="w-1.5 h-1.5 bg-[#c0c0c0] rounded-full"></div>
+          <div class="h-0.5 w-8 bg-[#c0c0c0]"></div>
+        </div>
+      </div>
 
-    <img src="LOGO.png" alt="Logo" class="h-14 mx-auto mb-2" />
+      <!-- Form Content -->
+      <div class="p-8">
 
-    <h2 class="text-2xl font-bold text-green-900 mb-3 py-3">
-      تسجيل حساب جديد
-    </h2>
+        <!-- Error Message -->
+        @if (errorMessage) {
+          <div class="mb-6 p-4 bg-red-50 border border-red-300 text-red-700 rounded-lg text-sm flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
 
-    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-      {{ errorMessage }}
+        <!-- Success Message -->
+        @if (successMessage) {
+          <div class="mb-6 p-4 bg-green-50 border border-green-300 text-green-700 rounded-lg text-sm flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span>{{ successMessage }}</span>
+          </div>
+        }
+
+        <!-- Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-5">
+
+          <!-- Full Name Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/>
+                </svg>
+                الاسم الكامل
+              </span>
+            </label>
+            <input
+              formControlName="fullName"
+              type="text"
+              placeholder="اسمك الكامل"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="f['fullName']?.invalid && f['fullName']?.touched"
+            />
+            <div *ngIf="f['fullName']?.invalid && f['fullName']?.touched" class="space-y-1">
+              <div *ngIf="f['fullName']?.errors?.['required']" class="text-xs text-red-600 font-medium">
+                الاسم الكامل مطلوب
+              </div>
+              <div *ngIf="f['fullName']?.errors?.['minlength']" class="text-xs text-red-600 font-medium">
+                الاسم يجب أن يكون 3 أحرف على الأقل
+              </div>
+              <div *ngIf="f['fullName']?.errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في الاسم
+              </div>
+              <div *ngIf="f['fullName']?.errors?.['invalidName']" class="text-xs text-red-600 font-medium">
+                الاسم يجب أن يبدأ بحرف فقط (بدون أرقام أو علامات)
+              </div>
+            </div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5A1.5 1.5 0 0120.25 18.75H3.75A1.5 1.5 0 012.25 17.25V6.75m19.5 0A1.5 1.5 0 0020.25 5.25H3.75A1.5 1.5 0 002.25 6.75m19.5 0l-7.72 5.15a1.5 1.5 0 01-1.56 0L2.25 6.75"/>
+                </svg>
+                البريد الإلكتروني
+              </span>
+            </label>
+            <input 
+              formControlName="email" 
+              type="email" 
+              placeholder="your@email.com"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="f['email']?.invalid && f['email']?.touched"
+            />
+            <div *ngIf="f['email']?.invalid && f['email']?.touched" class="space-y-1">
+              <div *ngIf="f['email']?.errors?.['required']" class="text-xs text-red-600 font-medium">
+                البريد الإلكتروني مطلوب
+              </div>
+              <div *ngIf="f['email']?.errors?.['email']" class="text-xs text-red-600 font-medium">
+                البريد الإلكتروني غير صحيح
+              </div>
+              <div *ngIf="f['email']?.errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في البريد الإلكتروني
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
+                </svg>
+                كلمة المرور
+              </span>
+            </label>
+            <input 
+              formControlName="password" 
+              type="password" 
+              placeholder="••••••••"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="f['password']?.invalid && f['password']?.touched"
+            />
+            <div *ngIf="f['password']?.invalid && f['password']?.touched" class="space-y-1">
+              <div *ngIf="f['password']?.errors?.['required']" class="text-xs text-red-600 font-medium">
+                كلمة المرور مطلوبة
+              </div>
+              <div *ngIf="f['password']?.errors?.['minlength']" class="text-xs text-red-600 font-medium">
+                كلمة المرور يجب أن تكون 6 أحرف على الأقل
+              </div>
+              <div *ngIf="f['password']?.errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في كلمة المرور
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
+                </svg>
+                تأكيد كلمة المرور
+              </span>
+            </label>
+            <input 
+              formControlName="confirmPassword" 
+              type="password"
+              placeholder="••••••••"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="(f['confirmPassword']?.invalid && f['confirmPassword']?.touched) || (registerForm.errors?.['passwordMismatch'] && f['confirmPassword']?.touched)"
+            />
+            <div *ngIf="f['confirmPassword']?.invalid && f['confirmPassword']?.touched" class="space-y-1">
+              <div *ngIf="f['confirmPassword']?.errors?.['required']" class="text-xs text-red-600 font-medium">
+                تأكيد كلمة المرور مطلوب
+              </div>
+              <div *ngIf="f['confirmPassword']?.errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في كلمة المرور
+              </div>
+            </div>
+            <div *ngIf="registerForm.errors?.['passwordMismatch'] && f['confirmPassword']?.touched" class="text-xs text-red-600 font-medium">
+              كلمات المرور غير متطابقة
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            [disabled]="registerForm.invalid || isLoading"
+            class="w-full bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] hover:from-[#0d3a2d] hover:to-[#155247]
+                   disabled:from-gray-400 disabled:to-gray-400
+                   text-white py-3 rounded-lg text-sm font-bold transition duration-300
+                   flex items-center justify-center gap-2 shadow-lg">
+            <span *ngIf="!isLoading">إنشاء الحساب</span>
+            <span *ngIf="isLoading">جاري التسجيل...</span>
+            <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v12m0 0l-3-3m3 3l3-3M3 16.5v-12m0 0l3 3m-3-3l-3 3" />
+            </svg>
+          </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="mt-6 pt-6 border-t border-[#c0c0c0]">
+          <p class="text-sm text-[#5a5a5a] text-center">
+            لديك حساب بالفعل؟ 
+            <a routerLink="/login" class="text-[#2c3e50] font-bold hover:text-[#c0c0c0] transition">
+              سجل الدخول هنا
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
 
-
-    <div *ngIf="successMessage" class="mb-4 p-3 bg-green-100 text-green-700 rounded text-sm">
-      {{ successMessage }}
+    <!-- Additional Info -->
+    <div class="mt-8 text-center">
+      <p class="text-xs text-[#5a5a5a]">
+        منصة آمنة لحساب المواريث وفقاً لأحكام الشريعة الإسلامية
+      </p>
     </div>
-
-
-    <form [formGroup]="registerForm" (ngSubmit)="register()" class="space-y-5">
-      <div class="relative">
-  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-         stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-      <path stroke-linecap="round" stroke-linejoin="round"
-            d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"/>
-    </svg>
-  </span>
-
-  <input
-    formControlName="fullName"
-    type="text"
-    placeholder="الاسم الكامل"
-    class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-sm
-           focus:outline-none focus:ring-1 focus:ring-green-900" />
-
-  <div *ngIf="f['fullName']?.invalid && f['fullName']?.touched"
-       class="text-red-600 text-xs mt-1">
-    <span *ngIf="f['fullName']?.errors?.['required']">
-      الاسم الكامل مطلوب
-    </span>
-    <span *ngIf="f['fullName']?.errors?.['minlength']">
-      الاسم يجب أن يكون 3 أحرف على الأقل
-    </span>
   </div>
-</div>
 
-      <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21.75 6.75v10.5A1.5 1.5 0 0120.25 18.75H3.75A1.5 1.5 0 012.25 17.25V6.75m19.5 0A1.5 1.5 0 0020.25 5.25H3.75A1.5 1.5 0 002.25 6.75m19.5 0l-7.72 5.15a1.5 1.5 0 01-1.56 0L2.25 6.75"/>
-          </svg>
-        </span>
-        <input formControlName="email" type="email" placeholder="البريد الإلكتروني"
-               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-sm
-                      focus:outline-none focus:ring-1 focus:ring-green-900" />
-        <div *ngIf="f['email']?.invalid && f['email']?.touched" class="text-red-600 text-xs mt-1">
-          <span *ngIf="f['email']?.errors?.['required']">البريد الإلكتروني مطلوب</span>
-          <span *ngIf="f['email']?.errors?.['email']">البريد الإلكتروني غير صحيح</span>
-        </div>
-      </div>
-
-      <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
-          </svg>
-        </span>
-        <input formControlName="password" type="password" placeholder="كلمة المرور"
-               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-sm
-                      focus:outline-none focus:ring-1 focus:ring-green-900" />
-        <div *ngIf="f['password']?.invalid && f['password']?.touched" class="text-red-600 text-xs mt-1">
-          <span *ngIf="f['password']?.errors?.['required']">كلمة المرور مطلوبة</span>
-          <span *ngIf="f['password']?.errors?.['minlength']">كلمة المرور يجب أن تكون 6 أحرف على الأقل</span>
-        </div>
-      </div>
-
-      <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
-          </svg>
-        </span>
-        <input formControlName="confirmPassword" type="password"
-               placeholder="تأكيد كلمة المرور"
-               class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg text-sm
-                      focus:outline-none focus:ring-1 focus:ring-green-900" />
-        <div *ngIf="f['confirmPassword']?.invalid && f['confirmPassword']?.touched" class="text-red-600 text-xs mt-1">
-          <span *ngIf="f['confirmPassword']?.errors?.['required']">تأكيد كلمة المرور مطلوب</span>
-        </div>
-        <div *ngIf="registerForm.errors?.['passwordMismatch'] && f['confirmPassword']?.touched" class="text-red-600 text-xs mt-1">
-          كلمات المرور غير متطابقة
-        </div>
-      </div>
-
-      <button type="submit" [disabled]="registerForm.invalid || isLoading"
-              [class.bg-green-600]="registerForm.valid"
-              [class.hover:bg-green-700]="registerForm.valid"
-              [class.bg-gray-400]="registerForm.invalid"
-              [class.hover:bg-gray-500]="registerForm.invalid"
-              class="w-full text-white py-3 rounded-lg text-sm cursor-pointer transition">
-        <span *ngIf="!isLoading">تسجيل</span>
-        <span *ngIf="isLoading">جاري التسجيل...</span>
-      </button>
-    </form>
-
-
-    <p class="text-xs text-gray-600 mt-8">
-      لديك حساب بالفعل؟
-      <a routerLink="/login" class="text-green-900 font-medium hover:underline">
-        سجل الدخول هنا
-      </a>
-    </p>
-  </div>
-  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-30 z-50">
-    <svg class="animate-spin h-16 w-16 text-green-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-    </svg>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
+      <svg class="animate-spin h-12 w-12 text-[#2c3e50]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <span class="text-[#2c3e50] font-semibold">جاري التسجيل...</span>
+    </div>
   </div>
 </div>

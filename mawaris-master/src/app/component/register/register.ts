@@ -12,6 +12,22 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
+function noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+  return /\s/.test(value) ? { spaces: true } : null;
+}
+
+function validNameValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+  // منع الأرقام والعلامات والنقاط في البديه
+  if (!/^[a-zA-Z\u0600-\u06FF\s]/.test(value)) {
+    return { invalidName: true };
+  }
+  return null;
+}
+
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password');
   const confirmPassword = control.get('confirmPassword');
@@ -42,10 +58,10 @@ export class Register {
   constructor() {
     this.registerForm = this.fb.group(
       {
-        fullName: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', Validators.required]
+        fullName: ['', [Validators.required, Validators.minLength(3), noSpacesValidator, validNameValidator]],
+        email: ['', [Validators.required, Validators.email, noSpacesValidator]],
+        password: ['', [Validators.required, Validators.minLength(6), noSpacesValidator]],
+        confirmPassword: ['', [Validators.required, noSpacesValidator]]
       },
       { validators: passwordMatchValidator }
     );
