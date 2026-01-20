@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public record InheritanceCalculationRequest(
-        @Positive(message = "Total estate must be greater than zero")
+        @PositiveOrZero(message = "Total estate must be greater than zero")
         BigDecimal totalEstate,
 
         @PositiveOrZero(message = "Debts must be zero or positive")

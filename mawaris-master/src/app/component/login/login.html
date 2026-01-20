@@ -1,93 +1,150 @@
 
-<div class="min-h-screen flex items-center justify-center relative" dir="rtl">
-  <div class="w-full max-w-md bg-[#fdfcf9] rounded-2xl shadow-lg px-6 py-12 text-center">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#f5f1e8] to-[#ede7dd] relative py-10 px-4" dir="rtl">
+  
+  <div class="w-full max-w-md">
+    <!-- Card Container -->
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#c0c0c0]">
+      
+      <!-- Header Section with Gradient -->
+      <div class="bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] p-8 text-center text-white">
+        <img src="new1.png" alt="Logo" class="h-16 mx-auto mb-4 drop-shadow-lg" />
+        <h1 class="text-3xl font-bold mb-2">تسجيل الدخول</h1>
+        <p class="text-[#c0c0c0] text-sm font-medium">حاسبة المواريث الإسلامية</p>
+        
+        <!-- Decorative Line -->
+        <div class="flex items-center justify-center gap-2 mt-4">
+          <div class="h-0.5 w-8 bg-[#c0c0c0]"></div>
+          <div class="w-1.5 h-1.5 bg-[#c0c0c0] rounded-full"></div>
+          <div class="h-0.5 w-8 bg-[#c0c0c0]"></div>
+        </div>
+      </div>
 
-    <img src="LOGO.png" alt="Logo" class="h-14 mx-auto mb-2" />
-    <h2 class="text-2xl font-bold text-green-900 mb-3 py-3">
-      تسجيل الدخول إلى حسابك
-    </h2>
+      <!-- Form Content -->
+      <div class="p-8">
+        
+        <!-- Error Message -->
+        @if (errorMessage) {
+          <div class="mb-6 p-4 bg-red-50 border border-red-300 text-red-700 rounded-lg text-sm flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0 mt-0.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span>خطأ في البريد الإلكتروني أو كلمة المرور</span>
+          </div>
+        }
 
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
 
-    <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-      خطأ فى الايميل او كلمة المرور
+          <!-- Email Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5A1.5 1.5 0 0120.25 18.75H3.75A1.5 1.5 0 012.25 17.25V6.75m19.5 0A1.5 1.5 0 0020.25 5.25H3.75A1.5 1.5 0 002.25 6.75m19.5 0l-7.72 5.15a1.5 1.5 0 01-1.56 0L2.25 6.75"/>
+                </svg>
+                البريد الإلكتروني
+              </span>
+            </label>
+            <input 
+              formControlName="email" 
+              type="email" 
+              placeholder="your@email.com"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
+            />
+            <!-- Error Messages -->
+            <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" 
+                 class="space-y-1">
+              <div *ngIf="f['email'].errors?.['required']" class="text-xs text-red-600 font-medium">
+                البريد الإلكتروني مطلوب
+              </div>
+              <div *ngIf="f['email'].errors?.['email']" class="text-xs text-red-600 font-medium">
+                بريد إلكتروني غير صالح
+              </div>
+              <div *ngIf="f['email'].errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في البريد الإلكتروني
+              </div>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="space-y-3">
+            <label class="block text-sm font-semibold text-[#2c3e50]">
+              <span class="inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-[#c0c0c0]">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
+                </svg>
+                كلمة المرور
+              </span>
+            </label>
+            <input 
+              formControlName="password" 
+              type="password" 
+              placeholder="••••••••"
+              class="w-full px-4 py-3 border-2 border-[#c0c0c0] rounded-lg text-sm bg-[#f9f7f4]
+                     focus:outline-none focus:ring-2 focus:ring-[#2c3e50] focus:bg-white transition"
+              [class.border-red-500]="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
+            />
+            <!-- Error Messages -->
+            <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" 
+                 class="space-y-1">
+              <div *ngIf="f['password'].errors?.['required']" class="text-xs text-red-600 font-medium">
+                كلمة المرور مطلوبة
+              </div>
+              <div *ngIf="f['password'].errors?.['minlength']" class="text-xs text-red-600 font-medium">
+                كلمة المرور يجب أن تكون 6 أحرف على الأقل
+              </div>
+              <div *ngIf="f['password'].errors?.['spaces']" class="text-xs text-red-600 font-medium">
+                المسافات غير مسموحة في كلمة المرور
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            [disabled]="isLoading || !loginForm.valid"
+            class="w-full bg-gradient-to-r from-[#2c3e50] to-[#2c3e50] hover:from-[#0d3a2d] hover:to-[#155247]
+                   disabled:from-gray-400 disabled:to-gray-400
+                   text-white py-3 rounded-lg text-sm font-bold transition duration-300
+                   flex items-center justify-center gap-2 shadow-lg">
+            <span *ngIf="!isLoading">تسجيل الدخول</span>
+            <span *ngIf="isLoading">جاري التسجيل...</span>
+            <svg *ngIf="!isLoading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          </button>
+        </form>
+
+        <!-- Register Link -->
+        <div class="mt-6 pt-6 border-t border-[#c0c0c0]">
+          <p class="text-sm text-[#5a5a5a] text-center">
+            ليس لديك حساب؟ 
+            <a routerLink="/register" class="text-[#2c3e50] font-bold hover:text-[#c0c0c0] transition">
+              سجل الآن
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
 
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
-
-      <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <!-- أيقونة الإيميل -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M21.75 6.75v10.5A1.5 1.5 0 0120.25 18.75H3.75A1.5 1.5 0 012.25 17.25V6.75m19.5 0A1.5 1.5 0 0020.25 5.25H3.75A1.5 1.5 0 002.25 6.75m19.5 0l-7.72 5.15a1.5 1.5 0 01-1.56 0L2.25 6.75"/>
-          </svg>
-        </span>
-        <input formControlName="email" type="email" placeholder="البريد الإلكتروني"
-               class="w-full pl-12 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-1"
-               [class.border-red-500]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
-               [class.border-green-700]="f['email'].valid && f['email'].dirty"
-               [class.border-gray-300]="!f['email'].dirty && !f['email'].touched"
-               [class.focus:ring-red-500]="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
-               [class.focus:ring-green-900]="f['email'].valid && f['email'].dirty"/>
-        <!-- رسائل الخطأ -->
-        <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)"
-             class="mt-1 text-right text-xs text-red-600 space-y-1">
-          <div *ngIf="f['email'].errors?.['required']">البريد الإلكتروني مطلوب</div>
-          <div *ngIf="f['email'].errors?.['email']">بريد إلكتروني غير صالح</div>
-        </div>
-      </div>
-
-      <!-- Password -->
-      <div class="relative">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M16.5 10.5V7.5a4.5 4.5 0 10-9 0v3m-.75 0h10.5A1.5 1.5 0 0118.25 12v6.75A1.5 1.5 0 0116.75 20.25H7.25A1.5 1.5 0 015.75 18.75V12A1.5 1.5 0 017.25 10.5z"/>
-          </svg>
-        </span>
-        <input formControlName="password" type="password" placeholder="كلمة المرور"
-               class="w-full pl-12 pr-4 py-3 border rounded-lg text-sm focus:outline-none focus:ring-1"
-               [class.border-red-500]="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
-               [class.border-green-700]="f['password'].valid && f['password'].dirty"
-               [class.border-gray-300]="!f['password'].dirty && !f['password'].touched"
-               [class.focus:ring-red-500]="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
-               [class.focus:ring-green-900]="f['password'].valid && f['password'].dirty"/>
-        <!-- رسائل الخطأ -->
-        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)"
-             class="mt-1 text-right text-xs text-red-600 space-y-1">
-          <div *ngIf="f['password'].errors?.['required']">كلمة المرور مطلوبة</div>
-          <div *ngIf="f['password'].errors?.['minlength']">كلمة المرور يجب أن تكون 6 أحرف على الأقل</div>
-        </div>
-      </div>
-
-      <!-- زر تسجيل الدخول -->
-      <button type="submit" [disabled]="isLoading"
-              [class.bg-green-600]="loginForm.valid"
-              [class.hover:bg-green-700]="loginForm.valid"
-              [class.bg-gray-400]="!loginForm.valid"
-              [class.hover:bg-gray-500]="!loginForm.valid"
-              class="w-full text-white py-3 rounded-lg text-sm flex items-center justify-center gap-2 transition">
-        <span *ngIf="!isLoading">تسجيل الدخول</span>
-        <span *ngIf="isLoading">جاري التسجيل...</span>
-      </button>
-    </form>
-
-
-
-    <p class="text-xs text-gray-600 mt-8">
-      ليس لديك حساب؟
-      <a routerLink="/register" class="text-green-900 font-medium hover:underline">سجل الآن</a>
-    </p>
+    <!-- Additional Info -->
+    <div class="mt-8 text-center">
+      <p class="text-xs text-[#5a5a5a]">
+        منصة آمنة لحساب المواريث وفقاً لأحكام الشريعة الإسلامية
+      </p>
+    </div>
   </div>
 
-
-  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-white bg-opacity-30 z-50">
-    <svg class="animate-spin h-16 w-16 text-green-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-    </svg>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-8 flex flex-col items-center gap-4 shadow-2xl">
+      <svg class="animate-spin h-12 w-12 text-[#2c3e50]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <span class="text-[#2c3e50] font-semibold">جاري التسجيل...</span>
+    </div>
   </div>
 </div>

@@ -1,62 +1,103 @@
-<nav class="bg-white/80 backdrop-blur-md shadow-sm ">
-  <div
-    class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
-    dir="rtl"
-  >
-   
-    <div class="flex items-center gap-2">
-      <img src="LOGO.png" alt="Logo" class="h-10 w-auto" />
+<nav class="bg-gradient-to-r from-[#1a1f2e] to-[#2c3e50] shadow-2xl relative z-50">
+  <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8" dir="rtl">
+    <div class="flex items-center justify-between h-16 sm:h-20">
+      
+      <!-- Logo Section -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+        <img src="new1.png" alt="Logo" class="h-10 sm:h-12 w-auto brightness-150" />
+        <div class="hidden sm:block">
+          <h1 class="text-lg sm:text-xl font-bold text-white">ميراثي</h1>
+          <p class="text-xs text-[#c0c0c0]">حاسبة المواريث الإسلامية</p>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="sm:hidden flex-shrink-0">
+        <button (click)="menuOpen = !menuOpen" class="text-white focus:outline-none p-2 rounded-lg hover:bg-white/10 transition">
+          <svg *ngIf="!menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg *ngIf="menuOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Desktop Menu -->
+      <div class="hidden sm:flex items-center justify-center flex-1 gap-1 md:gap-3 lg:gap-6">
+        <ul class="flex items-center justify-center gap-1 md:gap-3 lg:gap-6">
+          <li>
+            <a routerLink="/home" routerLinkActive="text-[#c0c0c0]" [routerLinkActiveOptions]="{ exact: true }" 
+               class="text-white text-sm md:text-base font-medium hover:text-[#c0c0c0] transition duration-300 flex items-center gap-1 md:gap-2 whitespace-nowrap">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 5h4"/>
+              </svg>
+              <span class="hidden md:inline">الرئيسية</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/about" routerLinkActive="text-[#c0c0c0]" 
+               class="text-white text-sm md:text-base font-medium hover:text-[#c0c0c0] transition duration-300 flex items-center gap-1 md:gap-2 whitespace-nowrap">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="hidden md:inline">عن الموقع</span>
+            </a>
+          </li>
+          <li *ngIf="authService.isLoggedIn$()" class="text-white text-sm md:text-base font-medium hover:text-[#c0c0c0] transition duration-300">
+            <a routerLink="/history" routerLinkActive="text-[#c0c0c0]" class="flex items-center gap-1 md:gap-2 whitespace-nowrap">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="hidden md:inline">السجل</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/contact" routerLinkActive="text-[#c0c0c0]" 
+               class="text-white text-sm md:text-base font-medium hover:text-[#c0c0c0] transition duration-300 flex items-center gap-1 md:gap-2 whitespace-nowrap">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <span class="hidden lg:inline">اتصل بنا</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Auth Buttons -->
+      <div class="hidden sm:flex items-center gap-2 md:gap-3 border-r border-[#c0c0c0]/30 ps-2 md:ps-6">
+          <a *ngIf="!(authService.isLoggedIn$())" routerLink="/login" class="w-full">
+            <button class="bg-[#c0c0c0] text-[#1a1f2e] px-3 md:px-6 py-2 rounded-lg font-semibold hover:bg-white hover:text-[#1a1f2e] transition duration-300 shadow-md text-sm md:text-base">
+              تسجيل الدخول
+            </button>
+          </a>
+          <button *ngIf="authService.isLoggedIn$()" (click)="logout()" 
+                  class="bg-red-500 text-white px-3 md:px-6 py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-300 shadow-md flex items-center gap-2 text-sm md:text-base">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span class="hidden md:inline">تسجيل الخروج</span>
+          </button>
+        </div>
     </div>
 
-    
-    <div class="flex items-center gap-12">
-     
-      <ul class="flex items-center gap-8 text-gray-700 font-medium">
-        <li class="hover:text-green-700 cursor-pointer">
-          <a routerLink="/home" routerLinkActive="text-green-700">الرئيسية</a>
-        </li>
-
-        <li class="hover:text-green-700 cursor-pointer">
-          <a routerLink="/about" routerLinkActive="text-green-700">عن الموقع</a>
-        </li>
-
-        <li
-          *ngIf="authService.isLoggedIn$() as isLoggedIn"
-          [ngClass]="{ 'hover:text-green-700 cursor-pointer': isLoggedIn }"
-        >
-          <a
-            *ngIf="isLoggedIn"
-            routerLink="/history"
-            routerLinkActive="text-green-700"
-          >
-            السجل
+    <!-- Mobile Menu -->
+    <div *ngIf="menuOpen" class="sm:hidden absolute top-16 md:top-20 right-0 left-0 bg-gradient-to-b from-[#1a1f2e] to-[#2c3e50] shadow-xl border-t border-[#c0c0c0]/20 z-40">
+      <div class="px-2 py-3 space-y-2">
+        <ul class="space-y-1">
+          <li><a routerLink="/home" (click)="menuOpen=false" class="block text-white font-medium hover:text-[#c0c0c0] hover:bg-white/10 px-3 py-2 rounded-lg transition text-sm">الرئيسية</a></li>
+          <li><a routerLink="/about" (click)="menuOpen=false" class="block text-white font-medium hover:text-[#c0c0c0] hover:bg-white/10 px-3 py-2 rounded-lg transition text-sm">عن الموقع</a></li>
+          <li *ngIf="authService.isLoggedIn$()" ><a routerLink="/history" (click)="menuOpen=false" class="block text-white font-medium hover:text-[#c0c0c0] hover:bg-white/10 px-3 py-2 rounded-lg transition text-sm">السجل</a></li>
+          <li><a routerLink="/contact" (click)="menuOpen=false" class="block text-white font-medium hover:text-[#c0c0c0] hover:bg-white/10 px-3 py-2 rounded-lg transition text-sm">اتصل بنا</a></li>
+        </ul>
+        
+        <div class="border-t border-[#c0c0c0]/20 pt-2 space-y-1">
+          <a *ngIf="!(authService.isLoggedIn$())" routerLink="/login" (click)="menuOpen=false" class="block">
+            <button class="w-full bg-[#c0c0c0] text-[#1a1f2e] px-3 py-2 rounded-lg font-semibold hover:bg-white transition text-sm">تسجيل الدخول</button>
           </a>
-        </li>
-
-        <li class="hover:text-green-700 cursor-pointer">
-          <a routerLink="/contact" routerLinkActive="text-green-700">
-            اتصل بنا
-          </a>
-        </li>
-      </ul>
-
-      
-      <div class="flex items-center gap-4">
-        <a *ngIf="!(authService.isLoggedIn$())" routerLink="/login">
-          <button
-            class="bg-green-900 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-green-800 transition"
-          >
-            تسجيل الدخول
-          </button>
-        </a>
-
-        <button
-          *ngIf="authService.isLoggedIn$()"
-          (click)="logout()"
-          class="bg-red-600 text-white px-5 py-2 cursor-pointer rounded-md hover:bg-red-700 transition"
-        >
-          تسجيل الخروج
-        </button>
+          <button *ngIf="authService.isLoggedIn$()" (click)="logout(); menuOpen=false" 
+                  class="w-full bg-red-500 text-white px-3 py-2 rounded-lg font-semibold hover:bg-red-600 transition text-sm">تسجيل الخروج</button>
+        </div>
       </div>
     </div>
   </div>

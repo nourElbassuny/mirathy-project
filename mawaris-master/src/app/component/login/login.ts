@@ -1,9 +1,14 @@
-
-import {ChangeDetectorRef, Component, inject, OnChanges, SimpleChanges} from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+
+function noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+  return /\s/.test(value) ? { spaces: true } : null;
+}
 
 @Component({
   selector: 'app-login',
@@ -12,8 +17,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login implements OnChanges{
-  private cdr = inject(ChangeDetectorRef);
+export class Login {
 
   loginForm: FormGroup;
   isLoading = false;
@@ -25,8 +29,8 @@ export class Login implements OnChanges{
 
   constructor() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, Validators.email, noSpacesValidator]],
+      password: ['', [Validators.required, Validators.minLength(6), noSpacesValidator]]
     });
   }
 
@@ -45,26 +49,17 @@ export class Login implements OnChanges{
 
     const { email, password } = this.loginForm.value;
 
-    console.log(this.loginForm.value);
-
     this.authService.login(email, password).subscribe({
       next: () => {
         this.router.navigate(['/home']);
+        console.log(localStorage.getItem("token"))
         this.isLoading = false;
       },
-      error: (message: string) => {
-        this.errorMessage = message;
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        console.log(message);
-      },
-      complete: () => {
+      error: (err) => {
+        this.errorMessage =
+          err?.error?.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
         this.isLoading = false;
       }
     });
-
-  }
-  ngOnChanges() {
-    this.onSubmit();
   }
 }
