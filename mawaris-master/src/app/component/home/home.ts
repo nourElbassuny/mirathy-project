@@ -347,10 +347,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (!estateValue || estateValue === '' || estateControl?.invalid) {
       if (!estateValue || estateValue === '') {
-        this.toastr.error('قيمة التركة مطلوبة', 'خطأ', {
-          positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-          timeOut: 5000
-        });
+        this.toastr.error('قيمة التركة مطلوبة', 'خطأ');
       }
 
       setTimeout(() => {
@@ -403,10 +400,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (Object.keys(heirs).length === 0) {
       this.errorMessage.set('يجب اختيار وارث واحد على الأقل');
-      this.toastr.error('يجب اختيار وارث واحد على الأقل', 'خطأ', {
-        positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-        timeOut: 5000
-      });
+      this.toastr.error('يجب اختيار وارث واحد على الأقل', 'خطأ');
       return;
     }
 
@@ -441,10 +435,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           willAmount: requestBody.will,
         });
 
-        this.toastr.success('تم حساب الميراث بنجاح', 'نجاح', {
-          positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-          timeOut: 3000
-        });
+        this.toastr.success('تم حساب الميراث بنجاح', 'نجاح');
 
         // Auto-scroll to results section
         setTimeout(() => {
@@ -475,10 +466,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
 
         this.errorMessage.set(errorMsg);
-        this.toastr.error(errorMsg, 'خطأ', {
-          positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-          timeOut: 5000
-        });
+        this.toastr.error(errorMsg, 'خطأ');
       }
     });
   }
@@ -522,10 +510,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.saveStatus.set(isFavorite ? 'favorited' : 'saved');
 
     const message = isFavorite ? 'تم إضافة الحساب إلى المفضلة' : 'تم حفظ الحساب بنجاح';
-    this.toastr.success(message, 'نجاح', {
-      positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-      timeOut: 3000
-    });
+    this.toastr.success(message, 'نجاح');
 
     setTimeout(() => {
       if(this.saveStatus() !== 'idle') this.saveStatus.set('idle');
@@ -572,10 +557,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.saveStatus.set('idle');
     this.showLoginPrompt.set(false);
 
-    this.toastr.info('تم إعادة تعيين النموذج بنجاح', 'تم', {
-      positionClass: this.isRtl ? 'toast-top-left' : 'toast-top-right',
-      timeOut: 3000
-    });
+    this.toastr.info('تم إعادة تعيين النموذج بنجاح', 'تم');
 
     // Auto-scroll to top of page
     setTimeout(() => {

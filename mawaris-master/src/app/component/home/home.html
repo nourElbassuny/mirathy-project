@@ -622,43 +622,43 @@
         </div>
       </div>
 
-      <!--        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 relative">-->
-      <!--          <button type="button" (click)="saveCalculation(false)" [disabled]="saveStatus() !== 'idle'"-->
-      <!--            class="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#1C352D]/20 text-[#1C352D] font-semibold py-3 px-6 rounded-full disabled:bg-green-100 disabled:text-green-700 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1C352D] hover:bg-[#1C352D]/30 hover:shadow-md transition-all duration-200 ease-in-out cursor-pointer">-->
-      <!--            @if (saveStatus() === 'saved') {-->
-      <!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">-->
-      <!--              <path fill-rule="evenodd"-->
-      <!--                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"-->
-      <!--                clip-rule="evenodd" />-->
-      <!--            </svg>-->
-      <!--            <span>تم الحفظ</span>-->
-      <!--            } @else {-->
-      <!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">-->
-      <!--              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />-->
-      <!--            </svg>-->
-      <!--            <span>حفظ الحساب</span>-->
-      <!--            }-->
-      <!--          </button>-->
+             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 relative">
+             <button type="button" (click)="saveCalculation(false)" [disabled]="saveStatus() !== 'idle'"
+                class="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#1C352D]/20 text-[#1C352D] font-semibold py-3 px-6 rounded-full disabled:bg-green-100 disabled:text-green-700 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1C352D] hover:bg-[#1C352D]/30 hover:shadow-md transition-all duration-200 ease-in-out cursor-pointer">
+                  @if (saveStatus() === 'saved') {
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                   <path fill-rule="evenodd"
+                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd" />
+                </svg>
+                 <span>تم الحفظ</span>
+                  } @else {
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                   <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                </svg>
+                <span>حفظ الحساب</span>
+                 }
+              </button>
 
-      <!--          <button type="button" (click)="saveCalculation(true)" [disabled]="saveStatus() !== 'idle'"-->
-      <!--            class="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-[#AA5656] border border-[#AA5656]/50 font-semibold py-3 px-6 rounded-full disabled:bg-rose-100 disabled:text-rose-700 disabled:border-rose-200 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA5656] hover:bg-[#AA5656]/10 hover:border-[#AA5656]/80 hover:shadow-md transition-all duration-200 ease-in-out cursor-pointer">-->
-      <!--            @if (saveStatus() === 'favorited') {-->
-      <!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">-->
-      <!--              <path fill-rule="evenodd"-->
-      <!--                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"-->
-      <!--                clip-rule="evenodd" />-->
-      <!--            </svg>-->
-      <!--            <span>تم الإضافة للمفضلة</span>-->
-      <!--            } @else {-->
-      <!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">-->
-      <!--              <path fill-rule="evenodd"-->
-      <!--                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"-->
-      <!--                clip-rule="evenodd" />-->
-      <!--            </svg>-->
-      <!--            <span>إضافة للمفضلة</span>-->
-      <!--            }-->
-      <!--          </button>-->
-      <!--        </div>-->
+              <button type="button" (click)="saveCalculation(true)" [disabled]="saveStatus() !== 'idle'"
+                class="w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-[#AA5656] border border-[#AA5656]/50 font-semibold py-3 px-6 rounded-full disabled:bg-rose-100 disabled:text-rose-700 disabled:border-rose-200 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA5656] hover:bg-[#AA5656]/10 hover:border-[#AA5656]/80 hover:shadow-md transition-all duration-200 ease-in-out cursor-pointer">
+               @if (saveStatus() === 'favorited') {
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                     clip-rule="evenodd" />
+                  </svg>
+                 <span>تم الإضافة للمفضلة</span>
+                 } @else {
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                   <path fill-rule="evenodd"
+                     d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                      clip-rule="evenodd" />
+                  </svg>
+                  <span>إضافة للمفضلة</span>
+                  }
+                </button>
+              </div>
 
       <div class="mt-8 border-t pt-4">
         <p class="text-center text-sm text-[#1C352D]/80 italic">
