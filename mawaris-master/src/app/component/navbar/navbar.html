@@ -71,7 +71,7 @@
               تسجيل الدخول
             </button>
           </a>
-          <button *ngIf="authService.isLoggedIn$()" (click)="logout()" 
+          <button *ngIf="authService.isLoggedIn$()" (click)="openLogoutModal()" 
                   class="bg-[#d94136] text-white px-3 md:px-6 py-2 rounded-lg font-semibold hover:bg-[#b8342b] transition duration-300 shadow-md flex items-center gap-2 text-sm md:text-base">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 md:h-5 w-4 md:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -95,10 +95,16 @@
           <a *ngIf="!(authService.isLoggedIn$())" routerLink="/login" (click)="menuOpen=false" class="block">
             <button class="w-full bg-[#c0c0c0] text-[#1a1f2e] px-3 py-2 rounded-lg font-semibold hover:bg-[#a0a0a0] transition text-sm">تسجيل الدخول</button>
           </a>
-          <button *ngIf="authService.isLoggedIn$()" (click)="logout(); menuOpen=false" 
+          <button *ngIf="authService.isLoggedIn$()" (click)="openLogoutModal(); menuOpen=false" 
                   class="w-full bg-[#d94136] text-white px-3 py-2 rounded-lg font-semibold hover:bg-[#b8342b] transition text-sm">تسجيل الخروج</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Logout Confirmation Modal -->
+  <app-logout-confirmation 
+    *ngIf="showLogoutModal()"
+    (confirmed)="handleLogoutConfirmation($event)"
+  ></app-logout-confirmation>
 </nav>
