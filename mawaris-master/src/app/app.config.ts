@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     provideAnimations(),
     provideToastr({
-      timeOut: 5000,
+      timeOut: 3000,
       positionClass: 'toast-bottom-left'
     })
   ]

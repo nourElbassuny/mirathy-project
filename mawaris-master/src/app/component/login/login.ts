@@ -58,7 +58,7 @@ export class Login {
         console.log('Login successful');
         this.toastr.success('تم تسجيل الدخول بنجاح!', 'مرحباً بك', {
           positionClass: 'toast-bottom-left',
-          timeOut: 7000
+          timeOut: 3000
         });
       },
       error: (err) => {
