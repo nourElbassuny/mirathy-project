@@ -13,7 +13,7 @@ import { TranslationService } from '../../services/translation.service';
 import { InheritanceRequest, FullInheritanceResponse, HeirResult, CalculationDetails } from '../../services/models';
 
 type HeirName = 'husband' | 'wife' | 'son' | 'daughter' | 'father' | 'mother' |
-  'paternalGrandfather' | 'maternalGrandfather' | 'maternalGrandmother' |
+  'paternalGrandfather'  | 'maternalGrandmother' |
   'paternalGrandmother' | 'sonOfSon' | 'daughterOfSon' |
   'fullBrother' | 'fullSister' | 'paternalBrother' |
   'paternalSister' | 'maternalBrother' | 'maternalSister';
@@ -52,6 +52,29 @@ function willAmountValidator(form: FormGroup): ValidatorFn {
   };
 }
 
+type HeirsSignal = {
+  husband?: number;
+  wife?: number;
+  son?: number;
+  daughter?: number;
+  father?: number;
+  mother?: number;
+
+  paternalGrandfather?: number;
+  paternalGrandmother?: number;
+  maternalGrandmother?: number;
+
+  sonOfSon?: number;
+  daughterOfSon?: number;
+
+  fullBrother?: number;
+  fullSister?: number;
+  paternalBrother?: number;
+  paternalSister?: number;
+  maternalBrother?: number;
+  maternalSister?: number;
+};
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -80,7 +103,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   hasEstateAmount = signal(false);
   isRtl = this.languageService.isRtl;
 
-  heirsArray = ['paternalGrandfather', 'maternalGrandfather', 'paternalGrandmother',
+  heirsArray = ['paternalGrandfather', 'paternalGrandmother',
     'maternalGrandmother', 'sonOfSon', 'daughterOfSon',
     'fullBrother', 'fullSister', 'paternalBrother',
     'paternalSister', 'maternalBrother', 'maternalSister'] as const;
@@ -99,37 +122,113 @@ export class HomeComponent implements OnInit, OnDestroy {
   form: FormGroup;
   heirs: WritableSignal<any>;
 
-  isFatherPresent = computed(() => (this.heirs()?.father ?? 0) > 0);
-  isMotherPresent = computed(() => (this.heirs()?.mother ?? 0) > 0);
-  isSonPresent = computed(() => (this.heirs()?.son ?? 0) > 0);
-  isDaughterPresent = computed(() => (this.heirs()?.daughter ?? 0) > 0);
-  isSonOfSonPresent = computed(() => (this.heirs()?.sonOfSon ?? 0) > 0);
-  isDaughterOfSonPresent = computed(() => (this.heirs()?.daughterOfSon ?? 0) > 0);
-  isFullBrotherPresent = computed(() => (this.heirs()?.fullBrother ?? 0) > 0);
-  isPaternalGrandfatherPresent = computed(() => (this.heirs()?.paternalGrandfather ?? 0) > 0);
-  isMaternalGrandfatherPresent = computed(() => (this.heirs()?.maternalGrandfather ?? 0) > 0);
+  private hasHeir(key: keyof HeirsSignal) {
+  return computed(() => (this.heirs()?.[key] ?? 0) > 0);
+}
+isFatherPresent = this.hasHeir('father');
+isMotherPresent = this.hasHeir('mother');
+
+isSonPresent = this.hasHeir('son');
+isDaughterPresent = this.hasHeir('daughter');
+isSonOfSonPresent = this.hasHeir('sonOfSon');
+isDaughterOfSonPresent = this.hasHeir('daughterOfSon');
+
+isFullBrotherPresent = this.hasHeir('fullBrother');
+isFullSisterPresent = this.hasHeir('fullSister');
+
+isPaternalBrotherPresent = this.hasHeir('paternalBrother');
+isPaternalSisterPresent = this.hasHeir('paternalSister');
+
+isMaternalBrotherPresent = this.hasHeir('maternalBrother');
+isMaternalSisterPresent = this.hasHeir('maternalSister');
+
+isPaternalGrandfatherPresent = this.hasHeir('paternalGrandfather');
+isPaternalGrandmotherPresent = this.hasHeir('paternalGrandmother');
+isMaternalGrandmotherPresent = this.hasHeir('maternalGrandmother');
 
   hasMaleDescendant = computed(() =>
     this.isSonPresent() ||
     this.isSonOfSonPresent()
   );
+
   hasAnyDescendant = computed(() =>
     this.hasMaleDescendant() ||
     this.isDaughterPresent() ||
     this.isDaughterOfSonPresent()
   );
-  hasMaleAscendant = computed(() => this.isFatherPresent() || this.isPaternalGrandfatherPresent() || this.isMaternalGrandfatherPresent());
 
-  isPaternalGrandfatherBlocked = computed(() => this.isFatherPresent());
-  isMaternalGrandfatherBlocked = computed(() => this.isFatherPresent() || this.isMotherPresent());
-  isSonOfSonBlocked = computed(() => this.isSonPresent());
-  isDaughterOfSonBlocked = computed(() => this.isSonPresent());
-  isMaternalGrandmotherBlocked = computed(() => this.isMotherPresent());
-  isPaternalGrandmotherBlocked = computed(() => this.isMotherPresent() || this.isFatherPresent());
-  isFullSiblingBlocked = computed(() => this.hasMaleDescendant() || this.hasMaleAscendant());
-  isPaternalSiblingBlocked = computed(() => this.isFullSiblingBlocked() || this.isFullBrotherPresent());
-  isMaternalSiblingBlocked = computed(() => this.hasAnyDescendant() || this.hasMaleAscendant());
+  hasMaleAscendant = computed(() => 
+    this.isFatherPresent() || 
+    this.isPaternalGrandfatherPresent()
+  );
 
+  hasParents = computed(() => 
+    this.isFatherPresent() || 
+    this.isMotherPresent()
+  );
+
+  // قواعد الحجب الصحيحة وفق الشريعة الإسلامية
+  isPaternalGrandfatherBlocked = computed(() => {
+    // الجد لأب محجوب بوجود الأب فقط
+    return this.isFatherPresent();
+  });
+
+
+  isMaternalGrandmotherBlocked = computed(() => {
+    // الجدة لأم محجوبة بوجود الأم فقط
+    return this.isMotherPresent();
+  });
+
+  isPaternalGrandmotherBlocked = computed(() => {
+    // الجدة لأب محجوبة بوجود الأم أو الأب
+    return this.isMotherPresent() || this.isFatherPresent();
+  });
+
+  isSonOfSonBlocked = computed(() => {
+    // ابن الابن محجوب بوجود الابن فقط
+    return this.isSonPresent();
+  });
+
+  isDaughterOfSonBlocked = computed(() => {
+    // بنت الابن محجوبة بوجود الابن فقط
+    return this.isSonPresent();
+  });
+
+  isFullSiblingBlocked = computed(() => {
+    // الأخوة الأشقاء محجوبون بوجود:
+    // 1. الابن أو ابن الابن (فرع وارث ذكر)
+    // 2. الأب (الأصل الوارث الذكر)
+    // الجد لأب لا يحجبهم (يشاركونه في العصبة)
+    return this.hasMaleDescendant() || this.isFatherPresent();
+  });
+
+  isPaternalSiblingBlocked = computed(() => {
+    // الأخوة لأب محجوبون بوجود:
+    // 1. ما يحجب الأخوة الأشقاء (الفرع الذكر أو الأب)
+    // الأخ الشقيق لا يحجبهم (يشاركونه في العصبة)
+    // الجد لأب لا يحجبهم (يشاركونه في العصبة)
+    return this.hasMaleDescendant() || this.isFatherPresent();
+  });
+
+  isMaternalSiblingBlocked = computed(() => {
+    // الأخوة لأم محجوبون بوجود:
+    // 1. الفرع الوارث (ذكر أو أنثى) - أي ولد
+    // 2. الأصل الوارث (الأب أو الأم أو الجد لأب إذا لم يكن هناك أب أو أم)
+    if (this.hasAnyDescendant() || this.isFatherPresent() || this.isMotherPresent()) {
+      return true;
+    }
+    
+    // الجد لأب يحجب الإخوة لأم فقط إذا لم يكن هناك أب أو أم
+    return this.isPaternalGrandfatherPresent() && !this.hasParents();
+  });
+
+  // دالة خاصة لتحديد ما إذا كان الجد لأب يحجب الإخوة لأم
+  isMaternalSiblingBlockedByGrandfatherOnly = computed(() => {
+    return this.isPaternalGrandfatherPresent() && 
+           !this.isFatherPresent() && 
+           !this.isMotherPresent() && 
+           !this.hasAnyDescendant();
+  });
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       deceasedGender: ['male', Validators.required],
@@ -145,7 +244,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         father: [0, [Validators.min(0), Validators.max(1)]],
         mother: [0, [Validators.min(0), Validators.max(1)]],
         paternalGrandfather: [0, [Validators.min(0), Validators.max(1)]],
-        maternalGrandfather: [0, [Validators.min(0), Validators.max(1)]],
         maternalGrandmother: [0, [Validators.min(0), Validators.max(1)]],
         paternalGrandmother: [0, [Validators.min(0), Validators.max(1)]],
         sonOfSon: [0, [Validators.min(0)]],
@@ -176,7 +274,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       };
 
       setControlState(this.form.get('heirs.paternalGrandfather'), this.isPaternalGrandfatherBlocked());
-      setControlState(this.form.get('heirs.maternalGrandfather'), this.isMaternalGrandfatherBlocked());
       setControlState(this.form.get('heirs.maternalGrandmother'), this.isMaternalGrandmotherBlocked());
       setControlState(this.form.get('heirs.paternalGrandmother'), this.isPaternalGrandmotherBlocked());
       setControlState(this.form.get('heirs.sonOfSon'), this.isSonOfSonBlocked());
@@ -290,7 +387,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       father: 1,
       mother: 1,
       paternalGrandfather: 1,
-      maternalGrandfather: 1,
       maternalGrandmother: 1,
       paternalGrandmother: 1,
       sonOfSon: undefined,
@@ -308,7 +404,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private isSingleHeir(heir: HeirName): boolean {
     const singleHeirs: HeirName[] = [
       'husband', 'wife', 'father', 'mother',
-      'paternalGrandfather', 'maternalGrandfather', 'maternalGrandmother', 'paternalGrandmother'
+      'paternalGrandfather', 'maternalGrandmother', 'paternalGrandmother'
     ];
     return singleHeirs.includes(heir);
   }
@@ -593,7 +689,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         father: 0,
         mother: 0,
         paternalGrandfather: 0,
-        maternalGrandfather: 0,
         maternalGrandmother: 0,
         paternalGrandmother: 0,
         sonOfSon: 0,
