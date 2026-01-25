@@ -10,7 +10,10 @@ public enum ShareType {
     TAASIB("تعصيبًا"),
     RADD("ردًا"),
     Mahgub("محجوب"),
-    MALE_DOUBLE_FEMALE("للذكر مثل حظ الأنثيين");
+    MALE_DOUBLE_FEMALE("للذكر مثل حظ الأنثيين"),
+    FULL_AND_MATERNAL_SIBLING("يتشارك الاجوة الاشقاء و لام فى الثلث ويقسم بينهم بالتساوي")
+    ;
+
 
     private final String text;
 

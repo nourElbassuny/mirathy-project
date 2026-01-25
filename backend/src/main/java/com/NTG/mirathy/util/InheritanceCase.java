@@ -78,7 +78,16 @@ public class InheritanceCase {
     }
 
     public boolean isElamaria(){
-        return (has(HeirType.WIFE)||has(HeirType.HUSBAND))&&has(HeirType.FATHER)&&has(HeirType.MOTHER)&&totalNumberOfHeirs() == 3;
+        return (has(HeirType.WIFE)||has(HeirType.HUSBAND))&&has(HeirType.FATHER)&&has(HeirType.MOTHER)&&
+                (!hasDescendant())&&(siblingCount()<2);
     }
+    public boolean isHajariyyahCase(){
+        return (has(HeirType.HUSBAND))&&(has(HeirType.MOTHER))&&(has(HeirType.FULL_BROTHER))
+                && ((count(HeirType.MATERNAL_BROTHER)+count(HeirType.MATERNAL_SISTER))>1)
+                && !hasDescendant()
+                &&(!has(HeirType.FATHER))
+                &&(!has(HeirType.GRANDFATHER));
+    }
+
 
 }

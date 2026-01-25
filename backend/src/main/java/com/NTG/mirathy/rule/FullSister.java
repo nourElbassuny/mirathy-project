@@ -27,7 +27,11 @@ public class FullSister implements InheritanceRule {
       if (c.hasMaleChild()||c.has(HeirType.FATHER)) {
           shareType=ShareType.Mahgub;
           reason="لا يرث الإخوه والأخوات الأشقاء عند وجود الولد - مثل الإبن وإبن الإبن وإن نزل - أو وجود الوالد - الأب فقط عند الجمهور";
-      } else if (c.has(HeirType.FULL_BROTHER)) {
+      }else if (c.isHajariyyahCase()) {
+          shareType=ShareType.FULL_AND_MATERNAL_SIBLING;
+          reason="يتم تشريك الأشقاء مع الأخوة لأم ويشترك الجميع فى الثلث بالسوية لافرق بين ذكر وأنثى لأن الجميع سيرث على اعتبار كونهم إخوة لأم فقط ويتم إسقاط قرابة الأب.";
+      }
+      else if (c.has(HeirType.FULL_BROTHER)) {
           shareType=ShareType.TAASIB;
           taaasibRule=(c.totalNumberOfHeirs()==2)?TaaasibRule.MALE_TWICE_FEMALE_ALL:TaaasibRule.MALE_TWICE_FEMALE_REMAINDER;
           reason="لأخوة الأشقاء رجالاً ونساء يرثون معاً بالتعصيب للذكر مثل حظ الأنثيين .قال تعالى ( وَإِن كَانُواْ إِخْوَةً رِّجَالاً وَنِسَاء فَلِلذَّكَرِ مِثْلُ حَظِّ الأُنثَيَيْنِ) ، ويشترط لذلك أن تكون المسألة كلالة أى لا يكون هناك ولد - مثل الإبن الصلبى وابن الإبن وإن نزل - ولا والد - الأب فقط عند الجمهور - وإلا حجبوا بهم.";

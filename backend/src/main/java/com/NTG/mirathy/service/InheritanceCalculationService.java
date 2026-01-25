@@ -110,16 +110,25 @@ public class InheritanceCalculationService {
                 Fraction fraction = new Fraction(member.fixedShare().getNumerator(),
                         member.fixedShare().getDenominator());
                 String nasib = "";
+                boolean MaternalSibling = member.heirType() == HeirType.MATERNAL_SIBLING || member.heirType() == HeirType.MATERNAL_SISTER || member.heirType() == HeirType.MATERNAL_BROTHER;
                 if (isAmiria && member.heirType() == HeirType.MOTHER) {
                     nasib = "الثلث الباقى بعد فرض ";
                     nasib += (inheritanceCase.has(HeirType.HUSBAND)) ? "الزوج" : "الزوجة";
                     note = "المسألة هى حالة خاصة و تسمى بالعمرية. وهى اجتماع الأم والأب مع أحد الزوجين. سميت بذلك لأن عمر رضي الله عنه قضى فيها بذلك ووافقه على ذلك زيد بن ثابت وعثمان بن عفان وعبد الله بن مسعود رضي الله عنهم ولكن خالفه فيها عبد الله بن عباس رضي الله عنه وجعل للأم ثلث التركة ، وتسمى المسألة أيضا الغراوية.";
+                } else if (inheritanceCase.isHajariyyahCase() && MaternalSibling) {
+                    nasib = "يتشارك الاجوة الاشقاء و لام فى الثلث ويقسم بينهم بالتساوي";
                 } else {
                     nasib = FractionUtils.fixedText(fraction) + ((flag) ? (" + " + member.taaasibRule().getDescription()) : "")
                             + ((elradFlag && request.heirs().size() == 1) ? " و الباقى ردا" : "");
                 }
                 int memberCount = 0;
-                if (member.heirType() == HeirType.MATERNAL_SIBLING) {
+                if (inheritanceCase.isHajariyyahCase() && MaternalSibling) {
+                    memberCount = request.heirs().getOrDefault(HeirType.FULL_SISTER, 0)
+                            + request.heirs().getOrDefault(HeirType.FULL_BROTHER, 0)
+                            + request.heirs().getOrDefault(HeirType.MATERNAL_BROTHER, 0)
+                            + request.heirs().getOrDefault(HeirType.MATERNAL_SISTER, 0);
+
+                } else if (member.heirType() == HeirType.MATERNAL_SIBLING) {
                     memberCount = request.heirs().get(HeirType.MATERNAL_SISTER)
                             + request.heirs().get(HeirType.MATERNAL_BROTHER);
 
@@ -136,10 +145,16 @@ public class InheritanceCalculationService {
                 Fraction fractionNisbtElfard = new Fraction(fractionList.get(index).numerator(),
                         fractionList.get(index).denominator() * memberCount);
 
+                if (inheritanceCase.isHajariyyahCase() && MaternalSibling) {
+                    memberCount -=( request.heirs().getOrDefault(HeirType.FULL_SISTER, 0)
+                            + request.heirs().getOrDefault(HeirType.FULL_BROTHER, 0));
+                }
 
                 String nisbtElfard = FractionUtils.text(fractionNisbtElfard);
                 double individualAmount = (money * fractionNisbtElfard.numerator()) / fractionNisbtElfard.denominator();
                 individualAmount = Math.round(individualAmount * 100.0) / 100.0;
+
+
                 resultList.add(new InheritanceResult(
                         member.heirType().getArabicName(),
                         nasib,
@@ -234,6 +249,27 @@ public class InheritanceCalculationService {
                             individualAmount,
                             member.reason()));
                 }
+            } else if (member.shareType() == ShareType.FULL_AND_MATERNAL_SIBLING) {
+                note = "المسألة تسمى بـ ( المشتركـة )\n" +
+                        "الأصل فى هذه المسألة أن يسقط الأخوة الأشقاء فلايرثوا شيئا لإستغراق الفروض التركة لأنهم هنا يرثوا بالتعصيب ، و هذه المسألة عرضت على أمير المؤمنين عمر بن الخطاب -رضي الله عنه وأرضاه- فقضى فيها ،فقد أعطى الإخوة لأم وأسقط الإخوة الأشقاء، فجاءه احد الأشقاء قائلا : يا أمير المؤمنين : هب أن أبانا حجرًا ملقي في اليم، أو أن أبانا كان حمارًا، ألسنا أولاد أم واحدة ؟ فعمر -رضي الله عنه وأرضاه- تأمل المسألة ثم أفتى بقضاء جديد، حيث شَرَّكَ الإخوة الأشقاء مع الإخوة لأم ، وهذا ما اختاره الجمهور ، وتسمى المسألة أيضا بالحماريه واليميه والحجرية.";
+                int memberCount = request.heirs().get(member.heirType());
+                int fullAndMaternalSiblingCount = request.heirs().getOrDefault(HeirType.FULL_SISTER, 0)
+                        + request.heirs().getOrDefault(HeirType.FULL_BROTHER, 0)
+                        + request.heirs().getOrDefault(HeirType.MATERNAL_BROTHER, 0)
+                        + request.heirs().getOrDefault(HeirType.MATERNAL_SISTER, 0);
+
+                Fraction fraction = new Fraction(1, 3L * fullAndMaternalSiblingCount);
+                String nasib = FractionUtils.text(fraction);
+                double individualAmount = (money * fraction.numerator()) / fraction.denominator();
+                individualAmount = Math.round(individualAmount * 100.0) / 100.0;
+                resultList.add(new InheritanceResult(
+                        member.heirType().getArabicName(),
+                        member.shareType().getText(),
+                        memberCount,
+                        nasib,
+                        individualAmount,
+                        member.reason()
+                ));
             } else if (member.shareType() == ShareType.Mahgub) {
                 int memberCount = 0;
                 if (member.heirType() == HeirType.MATERNAL_SIBLING) {
@@ -257,10 +293,9 @@ public class InheritanceCalculationService {
         if (grandfatherAndSiblingsShare.canApplyGrandfatherAndSiblingsShare(inheritanceCase)) {
             resultList = grandfatherAndSiblingsShare.applyIfSharingBetterForGrandfather(resultList, money);
         }
-        resultList.forEach(System.out::println);
+
 
         return new InheritanceCalculationResult(title, note, resultList);
-
     }
 
 
