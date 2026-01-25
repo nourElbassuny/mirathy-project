@@ -11,13 +11,6 @@ function noSpacesValidator(control: AbstractControl): ValidationErrors | null {
   return /\s/.test(value) ? { spaces: true } : null;
 }
 
-function passwordStartValidator(control: AbstractControl): ValidationErrors | null {
-  const value = control.value;
-  if (!value) return null;
-  // Password must start with a character (a-z, A-Z) or number (0-9)
-  return /^[a-zA-Z0-9]/.test(value) ? null : { passwordStart: true };
-}
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -38,7 +31,7 @@ export class Login {
   constructor(private toastr: ToastrService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, noSpacesValidator]],
-      password: ['', [Validators.required, Validators.minLength(6), noSpacesValidator, passwordStartValidator]]
+      password: ['', [Validators.required, Validators.minLength(6), noSpacesValidator]]
     });
   }
 
