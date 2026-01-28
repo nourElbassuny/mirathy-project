@@ -31,11 +31,17 @@ public class MaternalSiblings implements InheritanceRule {
             shareType = ShareType.FIXED;
             fixedShare = FixedShare.SIXTH;
             reason = "فرض الواحد - المنفرد - من الأخوة لأم هو السدس سواء أكان ذكرا أو أنثى ، وشرط ميراثهم هو عدم وجود الفرع الوارث المذكر - مثل الإبن وابن الإبن - أو المؤنث - مثل البنت وبنت الإبن - وعدم وجود الأصل الوارث المذكر - مثل الأب و أب الأب.";
-        } else {
+        }else if (c.isHajariyyahCase()) {
+            shareType=ShareType.FIXED;
+            fixedShare=FixedShare.THIRD;
+            reason="يتم تشريك الأشقاء مع الأخوة لأم ويشترك الجميع فى الثلث بالسوية لافرق بين ذكر وأنثى لأن الجميع سيرث على اعتبار كونهم إخوة لأم فقط ويتم إسقاط قرابة الأب.";
+        }
+        else {
             shareType = ShareType.FIXED;
             fixedShare = FixedShare.THIRD;
             reason = "فرض الأكثر من واحد من الأخوة لأم هو الثلث سواء أكانوا ذكورا أو إناثا ويقسم الثلث بينهم بالسوية لافرق بين ذكر وأنثى ، وشرط ميراثهم هو عدم وجود الفرع الوارث المذكر - مثل الإبن وابن الإبن - أو المؤنث - مثل البنت وبنت الإبن - وعدم وجود الأصل الوارث المذكر - مثل الأب و أب الأب.";
         }
+
         if (totalMembers == 1) {
             heirType = c.has(HeirType.MATERNAL_BROTHER) ? HeirType.MATERNAL_BROTHER : HeirType.MATERNAL_SISTER;
         } else if (c.has(HeirType.MATERNAL_BROTHER) && c.has(HeirType.MATERNAL_SISTER)) {
